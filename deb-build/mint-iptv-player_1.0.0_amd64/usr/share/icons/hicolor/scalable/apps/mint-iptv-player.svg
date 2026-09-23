@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <linearGradient id="mintGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#87cf3e"/>
+      <stop offset="100%" stop-color="#559922"/>
+    </linearGradient>
+    <linearGradient id="tvBg" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#26282e"/>
+      <stop offset="100%" stop-color="#141518"/>
+    </linearGradient>
+  </defs>
+  <rect x="8" y="16" width="112" height="86" rx="14" fill="url(#tvBg)" stroke="#3a3e47" stroke-width="3"/>
+  <rect x="16" y="24" width="96" height="70" rx="8" fill="#0b0c0e" stroke="#22242a" stroke-width="2"/>
+  <path d="M 64 16 C 60 8, 48 4, 42 6 C 44 12, 52 15, 64 16 Z" fill="#87cf3e"/>
+  <path d="M 64 16 C 68 8, 80 4, 86 6 C 84 12, 76 15, 64 16 Z" fill="#9fe653"/>
+  <rect x="54" y="102" width="20" height="8" rx="2" fill="#32353c"/>
+  <rect x="40" y="110" width="48" height="6" rx="3" fill="#424650"/>
+  <polygon points="50,42 86,59 50,76" fill="url(#mintGrad)"/>
+  <circle cx="86" cy="38" r="4" fill="#87cf3e"/>
+  <path d="M 94 48 A 12 12 0 0 1 94 70" fill="none" stroke="#87cf3e" stroke-width="3" stroke-linecap="round" opacity="0.8"/>
+  <path d="M 100 42 A 20 20 0 0 1 100 76" fill="none" stroke="#87cf3e" stroke-width="2.5" stroke-linecap="round" opacity="0.4"/>
+</svg>

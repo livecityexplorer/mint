@@ -1,0 +1,29 @@
+[Desktop Entry]
+Name=Mint IPTV Player
+Comment=Modern IPTV Player with M3U, Xtream Codes, and EPG Grid
+GenericName=IPTV & TV Guide Player
+Exec=/usr/bin/mint-iptv-player %U
+Icon=mint-iptv-player
+Terminal=false
+Type=Application
+Categories=AudioVideo;Video;TV;Player;
+Keywords=iptv;m3u;xtream;epg;tivimate;tv;player;stream;mint;cinnamon;
+StartupWMClass=mint-iptv-player
+MimeType=application/x-mpegurl;video/mp2t;application/vnd.apple.mpegurl;
+Actions=FullScreen;EpgGrid;Port43210;Port8080;
+
+[Desktop Action FullScreen]
+Name=Launch in Full Screen
+Exec=/usr/bin/mint-iptv-player --fullscreen
+
+[Desktop Action EpgGrid]
+Name=Open TV Guide (EPG)
+Exec=/usr/bin/mint-iptv-player --view=epg
+
+[Desktop Action Port43210]
+Name=Launch on Dedicated Port (43210)
+Exec=/usr/bin/mint-iptv-player --port=43210
+
+[Desktop Action Port8080]
+Name=Launch on Port 8080
+Exec=/usr/bin/mint-iptv-player --port=8080

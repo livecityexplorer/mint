@@ -1,0 +1,136 @@
+#!/bin/bash
+# Mint IPTV Player Launcher for Linux Mint
+APP_DIR="/usr/share/mint-iptv-player"
+CONFIG_DIR="$HOME/.config/mint-iptv-player"
+mkdir -p "$CONFIG_DIR" 2>/dev/null || true
+
+# Default Dedicated IPTV Port (avoids common port 3000 conflicts)
+DEFAULT_PORT="43210"
+CHOSEN_PORT=""
+
+# Check if user saved a preferred port in ~/.config/mint-iptv-player/port
+if [ -f "$CONFIG_DIR/port" ]; then
+    SAVED_PORT=$(cat "$CONFIG_DIR/port" 2>/dev/null | tr -d '[:space:]')
+    if [ -n "$SAVED_PORT" ]; then
+        CHOSEN_PORT="$SAVED_PORT"
+    fi
+fi
+
+# Parse CLI arguments for --port or -p (supports: --port=8080, --port 8080, -p 8080, -p=8080)
+ARGS=()
+while [ $# -gt 0 ]; do
+    case "$1" in
+        --port=*)
+            CHOSEN_PORT="${1#*=}"
+            shift
+            ;;
+        -p=*)
+            CHOSEN_PORT="${1#*=}"
+            shift
+            ;;
+        --port|-p)
+            if [ -n "$2" ]; then
+                CHOSEN_PORT="$2"
+                shift 2
+            else
+                shift
+            fi
+            ;;
+        *)
+            ARGS+=("$1")
+            shift
+            ;;
+    esac
+done
+
+# Priority: CLI argument > Environment variable > Saved config > Default 43210
+PORT="${CHOSEN_PORT:-${MINT_IPTV_PORT:-$DEFAULT_PORT}}"
+
+# Function to verify port availability or auto-increment to find next open port
+find_available_port() {
+    local p="$1"
+    for ((i=0; i<20; i++)); do
+        local check_p=$((p + i))
+        # 1. Check if our own Mint IPTV Player is already running on this port
+        if curl -s -m 1 "http://127.0.0.1:$check_p/api/health" >/dev/null 2>&1; then
+            echo "$check_p"
+            return 0
+        fi
+        # 2. Check if port is listening by another program
+        local in_use=0
+        if command -v lsof >/dev/null 2>&1; then
+            if lsof -Pi :$check_p -sTCP:LISTEN -t >/dev/null 2>&1; then
+                in_use=1
+            fi
+        elif command -v ss >/dev/null 2>&1; then
+            if ss -tln | grep -q ":$check_p "; then
+                in_use=1
+            fi
+        fi
+        
+        if [ "$in_use" -eq 0 ]; then
+            echo "$check_p"
+            return 0
+        fi
+    done
+    echo "$p"
+}
+
+ACTIVE_PORT=$(find_available_port "$PORT")
+export MINT_IPTV_PORT="$ACTIVE_PORT"
+export PORT="$ACTIVE_PORT"
+TARGET_URL="http://localhost:$ACTIVE_PORT"
+
+# Function to verify if server is alive on target URL
+is_server_alive() {
+    if command -v curl >/dev/null 2>&1; then
+        curl -s -m 1 "$TARGET_URL/api/health" >/dev/null 2>&1
+        return $?
+    elif command -v python3 >/dev/null 2>&1; then
+        python3 -c "import urllib.request, sys; urllib.request.urlopen('$TARGET_URL/api/health', timeout=1)" >/dev/null 2>&1
+        return $?
+    fi
+    return 1
+}
+
+# 1. Try Electron if available
+if command -v electron >/dev/null 2>&1; then
+    exec electron "$APP_DIR/electron-main.cjs" "${ARGS[@]}"
+fi
+
+# 2. Start the local server if not already alive
+if ! is_server_alive; then
+    # Priority 1: Built-in Python 3 server (standard on 100% of Linux Mint systems)
+    if command -v python3 >/dev/null 2>&1 && [ -f "$APP_DIR/server.py" ]; then
+        python3 "$APP_DIR/server.py" --port "$ACTIVE_PORT" >/dev/null 2>&1 &
+    # Priority 2: Node.js server if available
+    elif command -v node >/dev/null 2>&1 && [ -f "$APP_DIR/dist/server.cjs" ]; then
+        NODE_ENV=production MINT_IPTV_PORT="$ACTIVE_PORT" PORT="$ACTIVE_PORT" node "$APP_DIR/dist/server.cjs" >/dev/null 2>&1 &
+    fi
+    # Wait up to 5 seconds for server readiness
+    for retry in {1..25}; do
+        if is_server_alive; then
+            break
+        fi
+        sleep 0.2
+    done
+fi
+
+# 3. Launch in Dedicated App Window Mode (clean desktop window without browser toolbars)
+if command -v google-chrome >/dev/null 2>&1; then
+    exec google-chrome --app="$TARGET_URL" --class="mint-iptv-player" --name="mint-iptv-player" "${ARGS[@]}"
+elif command -v chromium-browser >/dev/null 2>&1; then
+    exec chromium-browser --app="$TARGET_URL" --class="mint-iptv-player" --name="mint-iptv-player" "${ARGS[@]}"
+elif command -v chromium >/dev/null 2>&1; then
+    exec chromium --app="$TARGET_URL" --class="mint-iptv-player" --name="mint-iptv-player" "${ARGS[@]}"
+elif command -v brave-browser >/dev/null 2>&1; then
+    exec brave-browser --app="$TARGET_URL" --class="mint-iptv-player" --name="mint-iptv-player" "${ARGS[@]}"
+elif command -v msedge >/dev/null 2>&1; then
+    exec msedge --app="$TARGET_URL" --class="mint-iptv-player" --name="mint-iptv-player" "${ARGS[@]}"
+elif command -v firefox >/dev/null 2>&1; then
+    exec firefox --new-window "$TARGET_URL" "${ARGS[@]}"
+elif command -v xdg-open >/dev/null 2>&1; then
+    exec xdg-open "$TARGET_URL"
+else
+    echo "Mint IPTV Player running on $TARGET_URL. Please open this address in your web browser."
+fi

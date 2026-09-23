@@ -1,0 +1,12 @@
+f039884a5240049658ccd3dead2aa2f6  usr/bin/mint-iptv-player
+2b6b62f9e6349abd2aae8270902a97f8  usr/share/applications/mint-iptv-player.desktop
+7ae3b080733dfb97ccb02e6e9aaa2b51  usr/share/icons/hicolor/scalable/apps/mint-iptv-player.svg
+b3136a962c78ed1216a17f6c0e30b9c0  usr/share/mint-iptv-player/dist/assets/aistudio/.gitignore
+d57ce082f08be0e5424cf9d9b6e11ec9  usr/share/mint-iptv-player/dist/assets/index-CEo_IYpw.js
+dab78c54012430f08f304647ecdee9e3  usr/share/mint-iptv-player/dist/assets/index-BKiUlvDv.css
+8bd097ee32427e2ada8f2145c0392786  usr/share/mint-iptv-player/dist/index.html
+fc4517b662377d9d9a60d95bf2ef7bca  usr/share/mint-iptv-player/dist/server.cjs
+f2adcc2d8fabbd5602dbbb8d8a57cbc0  usr/share/mint-iptv-player/dist/server.cjs.map
+ed1aa87631ba81d74dccbcbaafdef149  usr/share/mint-iptv-player/server.py
+624afeb6cfbd2bef86b26d04d773fb00  usr/share/mint-iptv-player/electron-main.cjs
+94daf2268d9083de292a63bb2621210c  usr/share/mint-iptv-player/index.html

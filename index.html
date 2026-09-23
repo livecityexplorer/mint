@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en" class="dark">
+  <head>
+    <script>
+      (function() {
+        try {
+          var nativeFetch = window.fetch ? window.fetch.bind(window) : null;
+          var _currentFetch = nativeFetch;
+          Object.defineProperty(window, 'fetch', {
+            configurable: true,
+            enumerable: true,
+            get: function() {
+              return _currentFetch;
+            },
+            set: function(fn) {
+              _currentFetch = fn;
+            }
+          });
+        } catch (e) {
+          try {
+            var protoFetch = Window.prototype.fetch;
+            Object.defineProperty(Window.prototype, 'fetch', {
+              configurable: true,
+              enumerable: true,
+              get: function() {
+                return protoFetch;
+              },
+              set: function(fn) {
+                protoFetch = fn;
+              }
+            });
+          } catch (_) {}
+        }
+      })();
+    </script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mint IPTV Player</title>
+    <meta name="description" content="Modern IPTV player tailored for Linux Mint with M3U, Xtream Codes support, interactive EPG grid, and downloadable .deb package." />
+    <meta property="og:title" content="Mint IPTV Player" />
+    <meta property="og:description" content="Modern IPTV player tailored for Linux Mint with M3U, Xtream Codes support, interactive EPG grid, and downloadable .deb package." />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  </head>
+  <body class="bg-[#121316] text-[#e3e5e8] antialiased overflow-hidden select-none">
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+

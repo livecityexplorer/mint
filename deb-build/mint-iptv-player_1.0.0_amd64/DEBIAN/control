@@ -1,0 +1,15 @@
+Package: mint-iptv-player
+Version: 1.0.0
+Section: video
+Priority: optional
+Architecture: amd64
+Installed-Size: 1007
+Maintainer: Linux Mint IPTV Community <community@linuxmint.com>
+Depends: bash, xdg-utils, python3
+Recommends: firefox | chromium-browser | google-chrome-stable | electron
+Homepage: https://github.com/linuxmint/mint-iptv-player
+Description: Native Modern IPTV & EPG Player for Linux Mint
+ A sleek, desktop-integrated IPTV player for Linux Mint supporting
+ M3U/M3U8 playlists, Xtream Codes (XC) API, interactive TiviMate-style EPG grid,
+ multi-category stream filtering, HLS adaptive bitrate, and hardware playback.
+ Perfectly integrates into Cinnamon, MATE, and XFCE menus with 1-click double-click installation.

@@ -1,0 +1,7 @@
+{
+  "name": "Mint IPTV Player",
+  "description": "Modern IPTV player tailored for Linux Mint with M3U, Xtream Codes support, interactive EPG grid, and downloadable .deb package.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
+
